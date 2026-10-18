@@ -1,0 +1,519 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Channel Toolkit</title>
+<link rel="icon" href="/assets/channel-mark.svg" type="image/svg+xml">
+<link rel="preload" href="/assets/fonts/LinkSans-LinkSansVF.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/fonts/link-sans.css">
+
+<link rel="stylesheet" href="/assets/ui/ui.css">
+</head>
+<body>
+<div id="startup-screen" role="status" aria-live="polite" aria-label="Loading ChannelToolkit"><div class="startup-brand"><img src="/assets/channel-mark.svg" width="100" height="100" alt=""><div class="startup-wordmark"><strong>Channel</strong>Toolkit</div><span id="startup-status">Loading your workspace…</span><button id="startup-retry" type="button" hidden onclick="location.reload()">Try again</button></div></div>
+
+<div class="app">
+  <header class="masthead">
+    <a class="header-brand" href="#overview" aria-label="Channel Toolkit home"><img src="/assets/channel-mark.svg" alt="Red five-arm logo" width="48" height="48"><span class="header-wordmark">Channel Toolkit<small>A workspace for your channel</small></span></a>
+    <div class="header-meta"><a href="#help">Help &amp; getting started ↗</a><span class="header-local">Local workspace</span></div>
+  </header>
+  <!-- ================= SIDEBAR ================= -->
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="channel-avatar" aria-hidden="true">C</div>
+      <span class="txt">
+        <b>Your channel</b>
+        <span id="brandChannel">not connected</span>
+      </span>
+    </div>
+
+    <div class="workspace-label">Your workspace</div>
+    <nav class="nav" id="nav" aria-label="Sections">
+      <button data-view="overview" aria-current="page">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg>
+        Overview
+      </button>
+      <button data-view="videos">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="3"/><path d="m10 9 5 3-5 3z"/></svg>
+        Videos <span class="count" id="cVideos">—</span>
+      </button>
+      <button data-view="edit">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+        Bulk Edit <span class="count" id="cEdit">—</span>
+      </button>
+      <button data-view="links">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/></svg>
+        Links <span class="count" id="cLinks">—</span>
+      </button>
+      <button data-view="download">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 12 5 5 5-5"/><path d="M3 19h18"/></svg>
+        Download
+      </button>
+      <button data-view="tools">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4 4 0 0 0 5 5l-9.9 9.9a2.1 2.1 0 0 1-3-3Z"/><path d="m18 2 4 4"/></svg>
+        Tools
+      </button>
+      <button data-view="help"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 0 1 5 0c0 2-2.5 2-2.5 4M12 16v1"/></svg>How to use</button>
+    </nav>
+
+    <div class="side-foot">
+      <button class="ghost sm" id="themeBtn" aria-label="Switch colour theme">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+        <span id="themeLabel">Theme</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- ================= MAIN ================= -->
+  <div class="main">
+    <header class="topbar">
+      <span class="badge dot" id="phaseBadge">idle</span>
+      <span class="small muted" id="phaseMsg">Ready.</span>
+      <span class="spacer"></span>
+      <button class="sm ghost" id="btnStop" disabled>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="6" y="6" width="12" height="12" rx="2"/></svg>
+        Stop
+      </button>
+      <button class="sm" id="btnSyncFree" title="Read every description, view count and like via yt-dlp. Costs no API quota.">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 3v6h-6"/></svg>
+        Sync metadata
+      </button>
+      <button class="sm primary" id="btnScanApi" title="Read via the YouTube API. Includes private videos. Costs about 21 quota units.">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        Scan for editing
+      </button>
+    </header>
+
+    <div class="content">
+
+      <!-- ============ OVERVIEW ============ -->
+      <section id="view-overview">
+        <div class="row" style="margin-bottom:16px">
+          <div><p class="eyebrow">Your channel, in one place</p><h1>Make room for creating.</h1><p class="sub" id="ovSub">A simpler way to keep your channel up to date.</p></div>
+        </div>
+        <div class="card" style="margin-bottom:26px;background:var(--muted);border:0"><div class="row"><div><h2>Fresh details. Across your channel.</h2><p class="sub">Update an Instagram handle, fix a link, or replace old text.</p></div><a class="btn primary" style="margin-left:auto;text-decoration:none;background:var(--primary);color:var(--on-primary)" href="#edit">Open Bulk Edit →</a></div></div>
+
+        <div class="grid g-stats" id="ovStats"></div>
+
+        <div class="card" style="margin-top:14px">
+          <h2>Getting started</h2>
+          <ol class="help-list"><li><b>Scan for editing</b> opens Google sign-in if needed and is required before description edits.</li><li><b>Sync metadata (free)</b> adds public view, like, duration, and description data. It does not edit YouTube.</li><li>Open <b>Bulk Edit</b>, add replacements, preview them, then type <b>UPDATE</b> only after reviewing.</li><li>Backups are created before edits. Use <b>Download &amp; Archive</b> for copies of content you own.</li></ol>
+          <p class="small muted" style="margin:12px 0 0">If a scan appears stuck, check the browser for Google sign-in. If no sign-in page opens after a few minutes, read the Activity log and restart the local app.</p>
+        </div>
+
+        <div class="grid g-2" style="margin-top:14px">
+          <div class="card">
+            <h2>Data sources</h2>
+            <p class="sub">Reads come from yt-dlp for free; the API quota is saved for writes.</p>
+            <div id="ovSources" style="margin-top:14px"></div>
+          </div>
+          <div class="card">
+            <h2>API quota today</h2>
+            <p class="sub" id="ovQuotaSub">Resets at midnight Pacific.</p>
+            <div class="bar" style="margin:14px 0 8px"><i id="ovQuotaBar"></i></div>
+            <div class="row small muted"><span id="ovQuotaTxt"></span>
+              <span class="spacer"></span><span id="ovQuotaReset"></span></div>
+            <div id="ovQuotaNote"></div>
+          </div>
+        </div>
+
+        <div class="grid g-2" style="margin-top:14px">
+          <div class="card">
+            <h2>Top performing</h2>
+            <p class="sub">Most viewed uploads.</p>
+            <div id="ovTop" style="margin-top:12px"></div>
+          </div>
+          <div class="card">
+            <h2>Least viewed</h2>
+            <p class="sub">Candidates for a new thumbnail or title.</p>
+            <div id="ovBottom" style="margin-top:12px"></div>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:14px">
+          <div class="row"><h2>Activity</h2>
+            <span class="spacer"></span>
+            <span class="small muted mono" id="logCount"></span></div>
+          <div class="log" id="log" style="margin-top:12px" aria-live="polite"></div>
+        </div>
+      </section>
+
+      <!-- ============ VIDEOS ============ -->
+      <section id="view-videos" hidden>
+        <div class="row" style="margin-bottom:16px">
+          <div><h1>Videos</h1><p class="sub" id="vidSub">Search, sort and select across your channel.</p></div>
+        </div>
+
+        <div class="card" style="margin-bottom:14px">
+          <div class="row">
+            <div style="flex:1 1 260px;min-width:200px">
+              <label for="vSearch">Search title or description</label>
+              <input id="vSearch" type="search" placeholder="e.g. beatstars, midwest emo, @prod.crmdrm" autocomplete="off">
+            </div>
+            <div style="flex:0 1 180px">
+              <label for="vFilter">Filter</label>
+              <select id="vFilter">
+                <option value="">All videos</option>
+                <option value="public">Public only</option>
+                <option value="unlisted">Unlisted only</option>
+                <option value="private">Private only</option>
+                <option value="nodesc">Short description (&lt;500)</option>
+                <option value="long">Near the 5000 limit</option>
+                <option value="nostats">No stats yet</option>
+              </select>
+            </div>
+            <div style="flex:0 1 160px">
+              <label for="vSort">Sort by</label>
+              <select id="vSort">
+                <option value="date">Newest first</option>
+                <option value="views">Most views</option>
+                <option value="likes">Most likes</option>
+                <option value="ratio">Best like rate</option>
+                <option value="length">Longest description</option>
+                <option value="title">Title A–Z</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="tablewrap">
+          <table id="vTable">
+            <thead><tr>
+              <th style="width:36px"><input type="checkbox" id="vAll" aria-label="Select all shown"></th>
+              <th style="width:88px">Thumb</th>
+              <th>Title</th>
+              <th class="num">Views</th>
+              <th class="num">Likes</th>
+              <th class="num">Desc</th>
+              <th>Status</th>
+            </tr></thead>
+            <tbody id="vBody"></tbody>
+          </table>
+        </div>
+        <div class="row small muted" style="margin-top:10px">
+          <span id="vCount"></span>
+          <span class="spacer"></span>
+          <button class="sm ghost" id="vMore" hidden>Show 100 more</button>
+        </div>
+        <div class="selbar" id="vSelBar" hidden>
+          <b id="vSelCount">0 selected</b>
+          <span class="spacer"></span>
+          <button class="sm ghost" id="vSelClear">Clear</button>
+          <button class="sm primary" id="vSelEdit">Bulk edit these</button>
+        </div>
+      </section>
+
+      <!-- ============ BULK EDIT ============ -->
+      <section id="view-edit" hidden>
+        <div class="page-heading">
+          <div><p class="eyebrow">Channel tools / Descriptions</p><h1>A little edit. Every video.</h1>
+          <p class="sub">Update links, handles, or text across your channel.<br>Preview every change before it goes live.</p></div>
+          <span class="badge">Bulk Edit</span>
+        </div>
+        <div class="steps" aria-label="Bulk edit progress">
+          <div class="step active"><b>Choose videos</b></div><div class="step"><b>Add replacements</b></div><div class="step"><b>Preview</b></div><div class="step"><b>Review</b></div><div class="step"><b>Apply</b></div>
+        </div>
+        <div class="edit-layout">
+          <div class="edit-main">
+            <div class="card">
+              <div class="section-head"><span class="section-number">01</span><div><h2>Which videos?</h2><p class="sub">Choose where your replacements will be made.</p></div></div>
+              <div class="scope-options">
+                <label><input type="radio" name="editScopeMode" value="all" checked><span>All videos<small id="allScopeCount">Scan to load your videos</small></span></label>
+              </div>
+              <div class="row"><p class="scope" id="editScope"></p><button class="sm ghost" id="chooseVideos">Choose videos →</button></div>
+            </div>
+            <div class="card">
+              <div class="section-head"><span class="section-number">02</span><div><h2>What would you like to change?</h2><p class="sub">Find text and replace it. Everything outside the match stays the same.</p></div></div>
+              <div class="mode-choice" aria-label="Replacement mode"><button id="rTextMode" aria-pressed="true">Find &amp; replace</button><button id="rInstagram" aria-pressed="false">Update Instagram</button></div>
+              <div id="instagramFields" hidden>
+                <p class="hint" style="margin:0 0 18px">Enter the old and new details. We handle @ signs and trailing slashes for you.</p>
+                <div class="field-pair">
+                  <div class="field"><label for="igOldName">Old Instagram username</label><input id="igOldName" value="prod.crmdrm" spellcheck="false"></div>
+                  <div class="field"><label for="igNewName">New Instagram username</label><input id="igNewName" value="prod_crmdrm" spellcheck="false"></div>
+                  <div class="field"><label for="igOldUrl">Old profile URL</label><input id="igOldUrl" value="https://www.instagram.com/prod.crmdrm" spellcheck="false"></div>
+                  <div class="field"><label for="igNewUrl">New profile URL</label><input id="igNewUrl" value="https://www.instagram.com/prod_crmdrm/" spellcheck="false"></div>
+                </div>
+                <p class="hint">This preset is used when you save or preview. Your saved replacements are kept until then.</p>
+              </div>
+              <div id="rList"></div>
+              <div id="rErrors" role="status" aria-live="polite"></div>
+              <div class="editor-actions"><button class="sm ghost" id="rAdd">+ Add replacement</button><button class="sm ghost" id="rSave">Save</button><button class="primary" id="rPreview">Preview changes →</button></div>
+            </div>
+            <div class="review-bar"><div><p><b>Ready to go live?</b></p><p class="small muted" id="applyHelp">Preview your changes first.</p></div><button class="accent" id="rApply" disabled>Apply changes</button></div>
+            <div id="editResult"><div class="empty-preview"><svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6M8 13h8M8 17h5"/></svg><h3>Your preview will appear here</h3><div class="small">See the before and after, with every change highlighted.</div></div></div>
+          </div>
+          <aside class="edit-aside" aria-label="Editing help">
+            <div class="card connection-card"><p class="eyebrow">Your channel</p><h3 id="editConnectionTitle">Connect &amp; scan</h3><p class="small muted" id="editConnectionHelp">Sign in with the account that owns your channel, then load your descriptions.</p><button class="sm" id="editScan">Scan for editing →</button></div>
+            <div class="card"><h2 class="aside-title">A quick walkthrough</h2><ol class="help-steps"><li><b>Choose your scope</b>Edit the whole channel or pick videos from your library.</li><li><b>Tell us what to replace</b>Paste old and new text, or use the Instagram preset.</li><li><b>Check the preview</b>Review the before and after. Nothing is changed yet.</li><li><b>Confirm with UPDATE</b>A backup is created before your changes go live.</li></ol></div>
+            <div class="card safety-card"><h3>Room to review.</h3><p>Backups, protected text, and description length checks run before updates.</p><a class="link-button" href="#help">How to use this toolkit ↗</a></div>
+          </aside>
+        </div>
+      </section>
+
+      <section id="view-help" hidden>
+        <div class="page-heading"><div><p class="eyebrow">Start here</p><h1>A guide to your toolkit.</h1><p class="sub">From connecting your channel to reviewing your first update.</p></div></div>
+        <div class="grid g-2">
+          <div class="card"><h2>01 / Connect &amp; scan</h2><p class="sub">First-time setup needs Python dependencies and a Google Desktop OAuth file named <code>client_secret.json</code> beside the app. The README has the setup steps.</p><p class="sub">Click <b>Scan for editing</b>. If Google sign-in opens, choose the account that owns the channel. Wait for the scan to finish before editing.</p></div>
+          <div class="card"><h2>02 / Choose your videos</h2><p class="sub">Use <b>All videos</b> for the scanned channel. To edit only some, open Videos, tick the uploads you want, and click <b>Bulk edit these</b>. Check the selected count in Bulk Edit.</p></div>
+          <div class="card"><h2>03 / Add replacements</h2><p class="sub">Paste the old text into <b>Text to find</b> and the new text into <b>Replace with</b>. Use <b>Update Instagram</b> for usernames and profile links. More options contains protected text, case sensitivity, and advanced regex patterns.</p></div>
+          <div class="card"><h2>04 / Preview &amp; review</h2><p class="sub">Click <b>Preview changes</b>. Review the before and after text, skipped videos, and daily update budget. A preview saves your replacement settings but does not change YouTube. Changing settings requires a new preview.</p></div>
+          <div class="card"><h2>05 / Confirm &amp; apply</h2><p class="sub">Click Apply and type <b>UPDATE</b>. A backup is verified before writing. Follow the Activity log for results. When your daily budget runs out, scan and preview the remaining work after the reset.</p></div>
+          <div class="card"><h2>06 / Backups &amp; downloads</h2><p class="sub">Description backups are saved locally in <code>backups/</code>. Restoring a description is currently manual; see the README. Download &amp; Archive saves media to your computer. Choose a preset and preview the command before starting.</p></div>
+        </div>
+        <div class="card"><h2>Two ways to read your channel</h2><p class="sub"><b>Scan for editing</b> uses Google sign-in to load editable descriptions, including private videos. It is required for Apply. <b>Sync metadata</b> uses yt-dlp to collect statistics and descriptions without spending YouTube API quota after your channel is known. It cannot edit videos.</p></div>
+        <div class="card"><h2>Need a hand?</h2><details class="advanced"><summary>Scanning seems stuck</summary><p class="sub">Check your browser for a Google sign-in window. Complete sign-in using the channel owner's account. If nothing happens after a few minutes, check Activity on Overview. Restart the app if sign-in was closed or cancelled.</p></details><details class="advanced"><summary>Apply is disabled or no matches were found</summary><p class="sub">Read the message beside Apply. Run Scan for editing first, check the old text matches your descriptions, then preview. Correct any replacement errors. If the daily budget is used, wait for the reset shown on Overview.</p></details><details class="advanced"><summary>A replacement was skipped</summary><p class="sub">Check the reason in the preview. A description might exceed 5,000 characters, contain protected text, or have an unintended link change. Make a smaller replacement and preview again.</p></details><details class="advanced"><summary>The page is offline or an old design is showing</summary><p class="sub">Stop the previous Python server with Ctrl+C, start <code>python web.py</code> again, then hard-refresh the browser with Ctrl+F5.</p></details></div>
+      </section>
+      <!-- ============ LINKS ============ -->
+      <section id="view-links" hidden>
+        <div class="row" style="margin-bottom:16px">
+          <div><h1>Links</h1>
+            <p class="sub">Every URL across your descriptions, grouped by how often it appears.</p></div>
+        </div>
+        <div class="note">A link that appears on hundreds of videos is worth checking — if it
+          ever breaks, every one of those descriptions is pointing at a dead page.</div>
+        <div id="linkList" style="margin-top:14px"></div>
+      </section>
+
+      <!-- ============ DOWNLOAD ============ -->
+      <section id="view-download" hidden>
+        <div class="row" style="margin-bottom:16px">
+          <div><h1>Download &amp; Archive</h1>
+            <p class="sub">Pull video, audio, captions, thumbnails and metadata off YouTube with yt-dlp.</p></div>
+        </div>
+
+        <div class="note warn">
+          <b>Only for content you own or have permission to download.</b> This does not
+          bypass DRM or copyright. Downloading other people's videos may breach
+          YouTube's Terms of Service — that call is yours.
+        </div>
+
+        <div id="dlEnv"></div>
+
+        <div class="card" style="margin-top:14px">
+          <h2>1. What to download</h2>
+          <p class="sub">One URL per line. A channel or playlist URL fetches everything in it.</p>
+          <div class="field" style="margin-top:12px">
+            <label for="dlUrls">URLs</label>
+            <textarea id="dlUrls" spellcheck="false"
+              placeholder="https://www.youtube.com/watch?v=...&#10;https://www.youtube.com/playlist?list=..."></textarea>
+            <div class="hint">
+              <button class="sm ghost" id="dlMyChannel" type="button">Use my channel</button>
+              <button class="sm ghost" id="dlSelected" type="button">Use selected videos</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>2. Preset</h2>
+          <p class="sub">Pick a starting point, then adjust anything below.</p>
+          <div class="grid" id="dlPresets"
+               style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr));margin-top:12px"></div>
+        </div>
+
+        <div class="card">
+          <h2>3. Options</h2>
+          <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(190px,1fr));margin-top:12px">
+            <div class="field"><label for="dlMode">Mode</label>
+              <select id="dlMode">
+                <option value="video">Video + audio</option>
+                <option value="audio">Audio only</option>
+                <option value="metadata">Metadata only</option>
+                <option value="subtitles">Captions only</option>
+                <option value="thumbnails">Thumbnails only</option>
+              </select></div>
+
+            <div class="field" data-when="video"><label for="dlQuality">Max resolution</label>
+              <select id="dlQuality">
+                <option value="best">Best available</option>
+                <option value="2160">2160p (4K)</option>
+                <option value="1440">1440p</option>
+                <option value="1080">1080p</option>
+                <option value="720">720p</option>
+                <option value="480">480p</option>
+                <option value="360">360p</option>
+              </select></div>
+
+            <div class="field" data-when="video"><label for="dlContainer">Container</label>
+              <select id="dlContainer">
+                <option value="mp4">MP4</option><option value="mkv">MKV</option>
+                <option value="webm">WebM</option>
+              </select></div>
+
+            <div class="field" data-when="audio"><label for="dlAudioFmt">Audio format</label>
+              <select id="dlAudioFmt">
+                <option value="mp3">MP3</option><option value="m4a">M4A</option>
+                <option value="flac">FLAC</option><option value="wav">WAV</option>
+                <option value="opus">Opus</option><option value="aac">AAC</option>
+                <option value="alac">ALAC</option>
+              </select></div>
+
+            <div class="field"><label for="dlTemplate">File naming</label>
+              <select id="dlTemplate">
+                <option value="date">20260825 - Title [id].ext</option>
+                <option value="flat">Title [id].ext</option>
+                <option value="channel">Channel/20260825 - Title [id].ext</option>
+                <option value="playlist">Playlist/001 - Title.ext</option>
+                <option value="archive">Per-video folder</option>
+              </select></div>
+
+            <div class="field"><label for="dlOutDir">Save into</label>
+              <input id="dlOutDir" type="text" value="downloads" spellcheck="false">
+              <div class="hint" id="dlOutHint"></div></div>
+          </div>
+
+          <details style="margin-top:6px">
+            <summary style="cursor:pointer;font-weight:600;font-size:13.5px;padding:6px 0">
+              Extras — captions, thumbnails, metadata, SponsorBlock</summary>
+            <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(210px,1fr));margin-top:12px">
+              <label class="row small" style="gap:8px"><input type="checkbox" id="dlSubs"> Download subtitles</label>
+              <label class="row small" style="gap:8px"><input type="checkbox" id="dlAutoSubs"> Include auto-captions</label>
+              <label class="row small" style="gap:8px"><input type="checkbox" id="dlEmbedSubs"> Burn subtitles into the file</label>
+              <label class="row small" style="gap:8px"><input type="checkbox" id="dlThumb"> Save thumbnail</label>
+              <label class="row small" style="gap:8px"><input type="checkbox" id="dlEmbedThumb" checked> Embed thumbnail as cover art</label>
+              <label class="row small" style="gap:8px"><input type="checkbox" id="dlInfoJson"> Save info JSON</label>
+              <label class="row small" style="gap:8px"><input type="checkbox" id="dlDesc"> Save description as .txt</label>
+              <label class="row small" style="gap:8px"><input type="checkbox" id="dlComments"> Save comments</label>
+              <label class="row small" style="gap:8px"><input type="checkbox" id="dlMeta" checked> Embed title/artist/date tags</label>
+              <label class="row small" style="gap:8px"><input type="checkbox" id="dlChapters"> Embed chapters</label>
+              <label class="row small" style="gap:8px"><input type="checkbox" id="dlArchive" checked> Never download the same video twice</label>
+              <label class="row small" style="gap:8px"><input type="checkbox" id="dlLive"> Livestream from the start</label>
+            </div>
+            <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(190px,1fr));margin-top:12px">
+              <div class="field"><label for="dlSubLangs">Caption languages</label>
+                <input id="dlSubLangs" type="text" value="en.*" class="mono" spellcheck="false">
+                <div class="hint">e.g. <code>en.*</code> or <code>en.*,tl.*</code></div></div>
+              <div class="field"><label for="dlSubConv">Caption format</label>
+                <select id="dlSubConv"><option value="srt">SRT</option><option value="vtt">VTT</option>
+                  <option value="ass">ASS</option><option value="none">Leave as-is</option></select></div>
+              <div class="field"><label for="dlSponsor">SponsorBlock</label>
+                <select id="dlSponsor"><option value="off">Off</option>
+                  <option value="mark">Mark as chapters</option>
+                  <option value="remove">Cut sponsor segments out</option></select></div>
+              <div class="field"><label for="dlCookies">Browser cookies</label>
+                <select id="dlCookies"><option value="">Off</option>
+                  <option value="chrome">Chrome</option><option value="edge">Edge</option>
+                  <option value="firefox">Firefox</option><option value="brave">Brave</option>
+                  <option value="opera">Opera</option><option value="vivaldi">Vivaldi</option>
+                </select>
+                <div class="hint">Needed for your private videos.</div></div>
+            </div>
+          </details>
+
+          <details style="margin-top:6px">
+            <summary style="cursor:pointer;font-weight:600;font-size:13.5px;padding:6px 0">
+              Filters — only grab what you want</summary>
+            <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(190px,1fr));margin-top:12px">
+              <div class="field"><label for="dlFilter">Match filter</label>
+                <input id="dlFilter" type="text" class="mono" spellcheck="false"
+                       placeholder="duration &lt; 600 &amp; view_count &gt;= 10000">
+                <div class="hint">Fields: duration, view_count, like_count, height, upload_date…</div></div>
+              <div class="field"><label for="dlDateAfter">Uploaded after</label>
+                <input id="dlDateAfter" type="text" class="mono" placeholder="now-7days or 20260101"></div>
+              <div class="field"><label for="dlDateBefore">Uploaded before</label>
+                <input id="dlDateBefore" type="text" class="mono" placeholder="today"></div>
+              <div class="field"><label for="dlItems">Playlist items</label>
+                <input id="dlItems" type="text" class="mono" placeholder="1-10,15"></div>
+              <div class="field"><label for="dlSection">Only this section</label>
+                <input id="dlSection" type="text" class="mono" placeholder="*00:01:30-00:02:45"></div>
+              <div class="field"><label for="dlRate">Speed limit</label>
+                <input id="dlRate" type="text" class="mono" placeholder="2M"></div>
+            </div>
+          </details>
+        </div>
+
+        <div class="card">
+          <div class="row">
+            <h2>4. Run</h2>
+            <span class="spacer"></span>
+            <button class="sm ghost" id="dlFormats">List formats</button>
+            <button class="sm" id="dlPreviewBtn">Preview command</button>
+            <button class="sm primary" id="dlStart">Start download</button>
+          </div>
+          <div id="dlPreview"></div>
+        </div>
+      </section>
+
+      <!-- ============ TOOLS ============ -->
+      <section id="view-tools" hidden>
+        <div class="row" style="margin-bottom:16px">
+          <div><h1>Tools</h1><p class="sub">Archive, export and one-off fixes.</p></div>
+        </div>
+
+        <div class="grid g-2">
+          <div class="card">
+            <h2>Export channel data</h2>
+            <p class="sub">Everything in the yt-dlp cache: titles, descriptions, views, likes, dates.</p>
+            <div class="row" style="margin-top:14px">
+              <button class="sm" id="tCsv">Export CSV</button>
+              <button class="sm" id="tJson">Export JSON</button>
+            </div>
+            <div class="hint">CSV opens in Excel. Written into the project folder.</div>
+          </div>
+
+          <div class="card">
+            <h2>Download thumbnails</h2>
+            <p class="sub">Saves every thumbnail as a JPG into <code>thumbnails/</code>.</p>
+            <div class="row" style="margin-top:14px">
+              <button class="sm" id="tThumbs">Download all</button>
+            </div>
+            <div class="hint">Free — uses yt-dlp, no API quota.</div>
+          </div>
+
+          <div class="card">
+            <h2>Private videos</h2>
+            <p class="sub">yt-dlp cannot see private uploads unless it borrows your browser cookies.</p>
+            <div class="field" style="margin-top:12px">
+              <label for="tCookies">Read cookies from browser</label>
+              <select id="tCookies">
+                <option value="">Off — public and unlisted only</option>
+                <option value="chrome">Chrome</option>
+                <option value="edge">Edge</option>
+                <option value="firefox">Firefox</option>
+                <option value="brave">Brave</option>
+              </select>
+            </div>
+            <div class="hint">Close the browser first, or it may refuse to read the cookie file.</div>
+          </div>
+
+          <div class="card">
+            <h2>Descriptions over 5000 characters</h2>
+            <p class="sub">Frees space by trimming whitespace only, never words or links.</p>
+            <div class="row" style="margin-top:14px">
+              <code>python fix_oversize.py</code>
+            </div>
+            <div class="hint">Run this one from PowerShell — it prints a detailed
+              character-by-character report worth reading in full.</div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+</div>
+
+<!-- ============ CONFIRM DIALOG ============ -->
+<dialog id="dlg">
+  <div class="dlg-head">
+    <h2 id="dlgTitle">Confirm</h2>
+    <p class="sub" id="dlgSub"></p>
+  </div>
+  <div class="dlg-body">
+    <div id="dlgBody"></div>
+    <div class="field" style="margin-top:14px">
+      <label for="dlgWord">Type <code>UPDATE</code> in capitals to enable the button</label>
+      <input id="dlgWord" type="text" autocomplete="off" spellcheck="false" placeholder="UPDATE">
+    </div>
+    <div class="note ok">A verified backup of every original description is written
+      before the first change, and progress is saved after every video.</div>
+  </div>
+  <div class="dlg-foot">
+    <button class="ghost" id="dlgCancel">Cancel</button>
+    <span class="spacer"></span>
+    <button class="accent" id="dlgGo" disabled>Start</button>
+  </div>
+</dialog>
+
+<script src="/app.js"></script>
+</body>
+</html>

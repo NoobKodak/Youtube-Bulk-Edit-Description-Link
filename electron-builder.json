@@ -1,0 +1,13 @@
+{
+  "appId": "local.channeltoolkit.desktop",
+  "productName": "Channel Toolkit",
+  "directories": {"output": "release"},
+  "files": ["desktop/main.cjs", "desktop/preload.cjs", "desktop/storage.cjs", "desktop/loading.html", "assets/channel-mark.svg", "assets/fonts/**", "package.json", "!node_modules/**"],
+  "extraResources": [
+    {"from":"desktop-stage/toolkit-backend","to":"backend"},
+    {"from":"desktop-stage/tools","to":"tools"},
+    {"from":"desktop-stage/licenses","to":"licenses"}
+  ],
+  "win": {"target": [{"target":"nsis","arch":["x64"]}], "icon":"desktop/icon.ico"},
+  "nsis": {"oneClick":false,"perMachine":false,"allowToChangeInstallationDirectory":true,"createDesktopShortcut":true,"createStartMenuShortcut":true,"deleteAppDataOnUninstall":false,"artifactName":"Channel-Toolkit-Setup-${version}.${ext}"}
+}

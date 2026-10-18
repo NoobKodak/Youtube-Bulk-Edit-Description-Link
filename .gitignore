@@ -1,0 +1,50 @@
+# ---- Google credentials: NEVER commit these ----
+client_secret.json
+client_secret*.json
+credentials.json
+token.json
+token*.json
+*.pickle
+.env
+
+# ---- Local data produced by the tools ----
+youtube_descriptions_backup.json
+oversize_backup.json
+backups/
+update_progress.json
+ytdlp_cache.json
+channel_export.csv
+channel_export.json
+thumbnails/
+downloads/
+downloads_test/
+download-archive.txt
+preview.txt
+oversize_videos.txt
+*.tmp
+.ytdlp_batch.txt
+.ytdlp_thumbs.txt
+
+# ---- Large binary ----
+yt-dlp.exe
+
+# ---- Python ----
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+env/
+*.egg-info/
+
+# ---- Editors / OS ----
+.vscode/
+.idea/
+Thumbs.db
+desktop.ini
+.ui-preview/
+node_modules/
+desktop-stage/
+.desktop-build/
+.desktop-build-audit.json
+release/
+desktop-test-data/

@@ -1,0 +1,26 @@
+[
+  {
+    "name": "Instagram profile URL",
+    "enabled": true,
+    "type": "regex",
+    "find": "(?<![\\w./])https?://(?:www\\.)?instagram\\.com/prod\\.crmdrm(?![\\w.@-]|/[^\\s<>\"'\\)\\]]+)/?",
+    "replace": "https://www.instagram.com/prod_crmdrm/",
+    "protect": [
+      "business.crmdrm@gmail.com",
+      "Prod. CRMDRM",
+      "facebook.com/crmdrm.beats"
+    ]
+  },
+  {
+    "name": "Instagram username",
+    "enabled": true,
+    "type": "regex",
+    "find": "(?<![\\w@./+\\-])(@?)prod\\.crmdrm(?![\\w@./+\\-])",
+    "replace": "\\1prod_crmdrm",
+    "protect": [
+      "business.crmdrm@gmail.com",
+      "Prod. CRMDRM",
+      "facebook.com/crmdrm.beats"
+    ]
+  }
+]
